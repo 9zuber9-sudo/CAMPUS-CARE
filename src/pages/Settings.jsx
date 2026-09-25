@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Settings() {
   const [autoDispatch, setAutoDispatch] = useState(true);
@@ -11,6 +11,35 @@ export default function Settings() {
   const [adminEmail, setAdminEmail] = useState('security@campus.edu');
 
   const [saved, setSaved] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+      setIsInstalled(true);
+    }
+
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallPWA = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice.outcome === 'accepted') {
+        setIsInstalled(true);
+        setDeferredPrompt(null);
+      }
+    } else {
+      alert('CampusCare is ready for PWA installation! On Chrome/Edge, click the Install icon in your browser address bar. On iOS/Safari, tap Share ➔ Add to Home Screen.');
+    }
+  };
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -167,6 +196,43 @@ export default function Settings() {
                 checked={emailAlerts}
                 onChange={(e) => setEmailAlerts(e.target.checked)}
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Progressive Web App (PWA) Installation Card */}
+        <div className="card">
+          <div className="card-header mb-4 flex-between">
+            <h3 className="card-title flex-center gap-2">
+              <span>📱</span> Progressive Web App (PWA) Installation
+            </h3>
+            {isInstalled ? (
+              <span className="badge badge-low">✅ Installed Standalone</span>
+            ) : (
+              <span className="badge badge-primary">⚡ PWA Ready</span>
+            )}
+          </div>
+          <div className="space-y-4">
+            <div className="p-4 bg-subtle radius-md flex-between flex-wrap gap-4 align-center">
+              <div>
+                <div className="font-bold text-sm text-white mb-1">Install CampusCare as Desktop / Mobile App</div>
+                <div className="text-xs text-secondary max-w-xl">
+                  Install CampusCare directly onto your phone or desktop home screen. Runs offline with zero browser address bar, instant launch, and native app performance.
+                </div>
+              </div>
+              <button
+                type="button"
+                className={`btn ${isInstalled ? 'btn-secondary' : 'btn-primary'} flex-center gap-2`}
+                onClick={handleInstallPWA}
+              >
+                <span>📥</span> {isInstalled ? 'App Already Installed' : 'Install PWA App'}
+              </button>
+            </div>
+
+            <div className="p-3 bg-black-20 radius-md text-xs text-secondary space-y-1">
+              <div className="font-semibold text-white">💡 Installation Instructions:</div>
+              <div>• <strong>Chrome / Edge (Desktop/Android):</strong> Click the <strong>"Install PWA App"</strong> button above or click the ⊕ Install icon in browser address bar.</div>
+              <div>• <strong>Safari (iOS/iPhone):</strong> Tap the <strong>Share button (⎋)</strong> ➔ Select <strong>"Add to Home Screen (+)"</strong>.</div>
             </div>
           </div>
         </div>
