@@ -23,6 +23,47 @@ export default function History() {
     return matchesSearch && matchesPriority;
   });
 
+  const exportToCSV = () => {
+    if (filteredHistory.length === 0) return;
+
+    const headers = [
+      'Incident ID',
+      'Type',
+      'Location',
+      'Priority',
+      'Reported By',
+      'Reported Time',
+      'Resolved Time',
+      'Duration (Mins)',
+      'Resolution Notes',
+    ];
+
+    const rows = filteredHistory.map((item) => [
+      item.id,
+      `"${item.type}"`,
+      `"${item.location}"`,
+      item.priority,
+      `"${item.reportedBy || 'Anonymous'}"`,
+      `"${new Date(item.timestamp).toLocaleString()}"`,
+      `"${item.resolvedAt ? new Date(item.resolvedAt).toLocaleString() : 'N/A'}"`,
+      item.responseTime || 15,
+      `"${(item.resolutionNotes || 'Resolved.').replace(/"/g, '""')}"`,
+    ]);
+
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    const dateStr = new Date().toISOString().slice(0, 10);
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `CampusCare_Audit_Log_${dateStr}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="page-container">
       {/* Header */}
@@ -33,8 +74,21 @@ export default function History() {
             Archive of resolved campus incidents, resolution duration, audit trails and post-incident reports.
           </p>
         </div>
-        <div className="badge badge-neutral text-sm p-2">
-          📁 {history.length} Resolved Records
+        <div className="flex-center gap-3">
+          <button
+            className="btn btn-secondary flex-center gap-2"
+            onClick={exportToCSV}
+            title="Download official CSV audit log"
+          >
+            <span>📥</span> Export CSV Report
+          </button>
+          <button
+            className="btn btn-primary flex-center gap-2"
+            onClick={() => window.print()}
+            title="Print official audit summary"
+          >
+            <span>🖨️</span> Print Log
+          </button>
         </div>
       </div>
 
