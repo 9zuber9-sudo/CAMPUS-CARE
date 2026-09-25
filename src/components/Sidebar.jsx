@@ -15,10 +15,14 @@ export default function Sidebar({ activePage, setActivePage, badgeCount }) {
     <aside className="sidebar">
       {/* Logo */}
       <div className="sidebar-logo">
-        <div className="sidebar-logo-icon">🛡</div>
+        <img
+          src="/srm-logo.png"
+          alt="SRM University"
+          style={{ height: 40, width: 40, objectFit: 'contain', flexShrink: 0 }}
+        />
         <div className="sidebar-logo-text">
-          <div className="sidebar-logo-name">CampusCare</div>
-          <div className="sidebar-logo-tagline">Safer Campus, Smarter Response</div>
+          <div className="sidebar-logo-name">SRM University</div>
+          <div className="sidebar-logo-tagline">CampusCare Emergency</div>
         </div>
       </div>
 

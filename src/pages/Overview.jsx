@@ -176,13 +176,13 @@ export default function Overview() {
         <AnalyticsSnippet />
         <ActivityFeed limit={6} />
         <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: 20 }}>
-          <div style={{ fontSize: 48, marginBottom: 10 }}>🏫</div>
+          <img src="/srm-logo.png" alt="SRM University" style={{ height: 60, width: 60, objectFit: 'contain', marginBottom: 10 }} />
           <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 700, color: 'var(--text-white)', marginBottom: 4 }}>
-            CampusCare Center
+            SRM University
           </div>
-          <div style={{ fontSize: 12, color: 'var(--accent)', marginBottom: 2 }}>Emergency Response Network</div>
+          <div style={{ fontSize: 12, color: 'var(--accent)', marginBottom: 2 }}>Delhi NCR, Sonipat</div>
           <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 8 }}>
-            Emergency Response &amp; Incident Management System
+            CampusCare Emergency Response System
           </div>
           <div style={{ marginTop: 14, fontSize: 11, color: 'var(--low)', display: 'flex', alignItems: 'center', gap: 5 }}>
             <span className="ai-dot" /> AI-powered · Real-time monitoring

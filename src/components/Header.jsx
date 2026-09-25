@@ -28,10 +28,14 @@ export default function Header({ setActivePage }) {
       <header className="header">
         {/* SRM Logo */}
         <div className="header-logo">
-          <div style={{ fontSize: 28, lineHeight: 1 }}>🎓</div>
+          <img
+            src="/srm-logo.png"
+            alt="SRM University"
+            style={{ height: 38, width: 38, objectFit: 'contain', borderRadius: 4 }}
+          />
           <div className="header-logo-text">
-            <div className="header-logo-name">CampusCare</div>
-            <div className="header-logo-sub">Incident Control Network</div>
+            <div className="header-logo-name">SRM University</div>
+            <div className="header-logo-sub">CampusCare Network</div>
           </div>
         </div>
 
